@@ -1,0 +1,58 @@
+[
+  {
+    "id": "tab_ble_presence",
+    "type": "tab",
+    "label": "BLE Presence Dashboard",
+    "disabled": false,
+    "info": "Starter flow for ESPresense MQTT topics"
+  },
+  {
+    "id": "mqtt_in_ble",
+    "type": "mqtt in",
+    "z": "tab_ble_presence",
+    "name": "ESPresense MQTT",
+    "topic": "espresense/#",
+    "qos": "0",
+    "datatype": "auto",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 160,
+    "y": 100,
+    "wires": [
+      [
+        "debug_ble"
+      ]
+    ]
+  },
+  {
+    "id": "debug_ble",
+    "type": "debug",
+    "z": "tab_ble_presence",
+    "name": "BLE messages",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "x": 390,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "mqtt_broker_local",
+    "type": "mqtt-broker",
+    "name": "Local Mosquitto",
+    "broker": "mosquitto",
+    "port": "1883",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true
+  }
+]

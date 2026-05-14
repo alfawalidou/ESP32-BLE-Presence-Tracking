@@ -1,0 +1,41 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: ble-presence-mosquitto
+    restart: unless-stopped
+    ports:
+      - "${MQTT_PORT:-1883}:1883"
+      - "${MQTT_WEBSOCKET_PORT:-9001}:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: ble-presence-nodered
+    restart: unless-stopped
+    ports:
+      - "${NODERED_PORT:-1880}:1880"
+    volumes:
+      - nodered_data:/data
+      - ./nodered/flows.json:/data/flows.json
+    depends_on:
+      - mosquitto
+
+  espresense-companion:
+    image: espresense/espresense-companion:latest
+    container_name: ble-presence-companion
+    restart: unless-stopped
+    ports:
+      - "${ESPRESENSE_COMPANION_PORT:-8267}:8267"
+      - "${ESPRESENSE_COMPANION_UPDATE_PORT:-8268}:8268"
+    volumes:
+      - ./espresense-companion-data:/config/espresense
+    depends_on:
+      - mosquitto
+
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  nodered_data:
